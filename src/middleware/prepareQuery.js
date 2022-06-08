@@ -70,6 +70,12 @@ module.exports = function (options) {
       } else if (!Array.isArray(queryOptions.populate)) {
         queryOptions.populate = [queryOptions.populate]
       }
+
+      queryOptions.populate = queryOptions.populate.map((pop) => {
+        if (pop.strictPopulate !== undefined) return pop
+        pop.strictPopulate = false
+        return pop
+      })
     }
 
     return queryOptions

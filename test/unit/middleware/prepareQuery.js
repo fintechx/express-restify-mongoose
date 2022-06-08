@@ -206,6 +206,7 @@ describe('prepareQuery', () => {
       populate: [
         {
           path: 'foo',
+          strictPopulate: false,
         },
       ],
     })
@@ -328,6 +329,7 @@ describe('prepareQuery', () => {
         populate: [
           {
             path: 'foo',
+            strictPopulate: false,
           },
         ],
       })
@@ -340,6 +342,7 @@ describe('prepareQuery', () => {
       let req = {
         query: {
           populate: 'foo,bar',
+          strictPopulate: false,
         },
       }
 
@@ -349,9 +352,11 @@ describe('prepareQuery', () => {
         populate: [
           {
             path: 'foo',
+            strictPopulate: false,
           },
           {
             path: 'bar',
+            strictPopulate: false,
           },
         ],
       })
@@ -366,6 +371,7 @@ describe('prepareQuery', () => {
           populate: {
             path: 'foo.bar',
             select: 'baz',
+            strictPopulate: false,
             match: { qux: 'quux' },
             options: { sort: 'baz' },
           },
@@ -379,6 +385,7 @@ describe('prepareQuery', () => {
           {
             path: 'foo.bar',
             select: 'baz',
+            strictPopulate: false,
             match: { qux: 'quux' },
             options: { sort: 'baz' },
           },
@@ -404,6 +411,7 @@ describe('prepareQuery', () => {
           {
             path: 'foo',
             select: 'bar baz',
+            strictPopulate: false,
           },
         ],
       })

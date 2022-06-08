@@ -27,8 +27,8 @@ module.exports = function (createFn, setup, dismantle) {
           db.models.Customer,
           app.isRestify
             ? {
-                restify: app.isRestify,
-              }
+              restify: app.isRestify,
+            }
             : undefined
         )
 
@@ -223,7 +223,7 @@ module.exports = function (createFn, setup, dismantle) {
           assert.ok(!err)
           assert.equal(res.statusCode, 200)
           assert.equal(body.length, 3)
-          assert.equal(res.headers['x-total-count'], undefined)
+          assert.equal(res.headers['x-total-count'], 'undefined')
           assert.equal(body[0], 'Bob')
           assert.equal(body[1], 'John')
           assert.equal(body[2], 'Mike')
@@ -938,11 +938,12 @@ module.exports = function (createFn, setup, dismantle) {
           delete body.reason
           assert.deepEqual(body, {
             kind: 'string',
-            message: 'Cast to string failed for value "{}" at path "name" for model "Customer"',
+            message: 'Cast to string failed for value "{}" (type Object) at path "name" for model "Customer"',
             name: 'CastError',
             path: 'name',
             stringValue: '"{}"',
             value: {},
+            valueType: 'Object',
           })
           done()
         }
