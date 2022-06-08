@@ -27,8 +27,8 @@ module.exports = function (createFn, setup, dismantle) {
           db.models.Customer,
           app.isRestify
             ? {
-              restify: app.isRestify,
-            }
+                restify: app.isRestify,
+              }
             : undefined
         )
 
