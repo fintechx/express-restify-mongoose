@@ -147,11 +147,12 @@ module.exports = function (createFn, setup, dismantle) {
               delete body.reason
               assert.deepEqual(body, {
                 kind: 'Number',
-                message: 'Cast to Number failed for value "not a number" at path "age"',
+                message: 'Cast to Number failed for value "not a number" (type string) at path "age"',
                 name: 'CastError',
                 path: 'age',
                 stringValue: '"not a number"',
                 value: 'not a number',
+                valueType: 'string',
               })
               done()
             }
@@ -170,15 +171,9 @@ module.exports = function (createFn, setup, dismantle) {
             (err, res, body) => {
               assert.ok(!err)
               assert.equal(res.statusCode, 400)
-              assert.ok(Object.keys(body).length === 5 || Object.keys(body).length === 6 || Object.keys(body).length === 8)
-              assert.equal(body.name, 'MongoError')
+              assert.ok(Object.keys(body).length === 6 || Object.keys(body).length === 8 || Object.keys(body).length === 9)
+              assert.equal(body.name, 'MongoServerError')
               // Remove extra whitespace and allow code 11001 for MongoDB < 3
-              assert.ok(
-                body.errmsg
-                  .replace(/\s+/g, ' ')
-                  .replace('exception: ', '')
-                  .match(/E11000 duplicate key error (?:index|collection): database.customers(\.\$| index: )name_1 dup key: { (?:name|): "John" }/) !== null
-              )
               assert.ok(
                 body.message
                   .replace(/\s+/g, ' ')
@@ -628,15 +623,16 @@ module.exports = function (createFn, setup, dismantle) {
               assert.deepEqual(body, {
                 name: 'ValidationError',
                 _message: 'Customer validation failed',
-                message: 'Customer validation failed: age: Cast to Number failed for value "not a number" at path "age"',
+                message: 'Customer validation failed: age: Cast to Number failed for value "not a number" (type string) at path "age"',
                 errors: {
                   age: {
                     kind: 'Number',
-                    message: 'Cast to Number failed for value "not a number" at path "age"',
+                    message: 'Cast to Number failed for value "not a number" (type string) at path "age"',
                     name: 'CastError',
                     path: 'age',
                     stringValue: '"not a number"',
                     value: 'not a number',
+                    valueType: 'string',
                   },
                 },
               })
@@ -657,16 +653,9 @@ module.exports = function (createFn, setup, dismantle) {
             (err, res, body) => {
               assert.ok(!err)
               assert.equal(res.statusCode, 400)
-              // Remove extra whitespace, allow 6, 8, or 9 keys and code 11001 for MongoDB < 3
               assert.ok(Object.keys(body).length === 6 || Object.keys(body).length === 8 || Object.keys(body).length === 9)
-              assert.equal(body.name, 'MongoError')
-              assert.equal(body.driver, true)
-              assert.ok(
-                body.errmsg
-                  .replace(/\s+/g, ' ')
-                  .replace('exception: ', '')
-                  .match(/E11000 duplicate key error (?:index|collection): database.customers(?:\.\$| index: )name_1 dup key: { (?:name|): "John" }/) !== null
-              )
+              assert.equal(body.name, 'MongoServerError')
+              // Remove extra whitespace and code 11001 for MongoDB < 3
               assert.ok(
                 body.message
                   .replace(/\s+/g, ' ')
